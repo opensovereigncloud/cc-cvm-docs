@@ -880,7 +880,7 @@ In case the Kubernetes admins are trusted, it is sufficient to run the Kubernete
 
 In case of our adversary models, we cannot trust the admins. We need additional isolation of the confidential applications and services from the admins and the operating system (which is controlled by the admins).
 
-In case the infrastructure provider and the Kubernetes provider are different entities, it might makes sense to run the Kubernetes nodes inside of CVMs.
+In case the infrastructure provider and the Kubernetes provider are different entities, it might make sense to run the Kubernetes nodes inside of CVMs.
 
 ### Kubernetes Nodes are VMs
 
