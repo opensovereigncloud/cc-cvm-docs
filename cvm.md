@@ -478,7 +478,7 @@ Intel SGX enclaves provide hardware-based protections which provide
 - Secure entry/exit mechanisms prevent unauthorized access
 - Context protection during interrupts and exceptions
 
-There known attacks on enclaves that one needs to protect against:
+There are known attacks on enclaves that one needs to protect against:
 
 - Side-channel attacks, in particular, cache-based attacks have been demonstrated
 - Speculative execution vulnerabilities affected SGX
