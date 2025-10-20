@@ -874,7 +874,7 @@ Azure supports the creation of CVMs from within native VMs. The resources are al
 
 #### Kubernetes Admins are trusted
 
-In case the Kubernetes admins are trusted, it is sufficient to run the Kubernetes nodes inside of CVM to protect an application. Please note that according to our adversary models, no admin nor user in the runtime environment can be trusted. This means that just running a Kubernetes node inside of a CVM is not sufficient because it does not isolated the confidential applications from the admins and users that have access to the runtime environment.
+In case the Kubernetes admins are trusted, it is sufficient to run the Kubernetes nodes inside of CVM to protect an application. Please note that according to our adversary models, no admin nor user in the runtime environment can be trusted. This means that just running a Kubernetes node inside of a CVM is not sufficient because it does not isolate the confidential applications from the admins and users who have access to the runtime environment.
 
 #### Kubernetes Admins are untrusted
 
