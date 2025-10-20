@@ -765,7 +765,7 @@ There are more interfaces that we need to consider (e.g., the above mentioned `c
 
 ## Objectives for Supporting CVMs
 
-- **(T1)**: Building a confidential CVM platform instead of enclaves, we would like to be able to address all adversarial models, i.e., **(A1-10)**. This would be result in a better security than option (O5) by being able to address adversarial models. This would require some extensions along the following lines:
+- **(T1)**: Building a confidential CVM platform instead of enclaves, we would like to be able to address all adversarial models, i.e., **(A1-10)**. This would result in a better security than option (O5) by being able to address adversarial models. This would require some extensions along the following lines:
 
   - **(A9.3)**: Potential to integrate with a confidential build process with governance to protect against attacks by the development team
 
