@@ -821,7 +821,7 @@ pVMs enable a single application to be able to exploit a solution like AMD SEV a
 IPC or memory to either emulate multiprocessing or avail individual serviceswhile still maintaining their relative isolation. Such an architectural approach is shown in the Figure below.
 
 ![alt text](images/pvm2.png)
-**Figure**: *A container featuring an application hosting to virtual machines. The two pVM, spanning user and kernel spaces in a VM, collaborate with the host application and each other via shared memory as shown. This link could be used to emulate functionality and non-sensitive state in the host. The disadvantage of this approach is that we have to have on CVM per process and hence, potentially multiple CVMs per container. This can introduce quite dramatic overheads in spawning applications and containers.*
+**Figure**: *A container featuring an application hosting two virtual machines (pVMs). These pVMs, spanning both user and kernel spaces in a VM, collaborate with the host application and each other via shared memory, as illustrated. This link could be used to emulate functionality and non-sensitive state in the host. The disadvantage of this approach is that we have to have on CVM per process and hence, potentially multiple CVMs per container. This can introduce quite dramatic overheads in spawning applications and containers.*
 
 ### Microkernel and libOS Solution
 
