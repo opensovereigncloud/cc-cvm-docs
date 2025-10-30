@@ -490,7 +490,7 @@ There are several shortcomings regarding the design of SGX enclaves. In the cont
 - applications need to be transformed since system calls are not permitted inside the enclaves (E1),
 - shared memory between process-based enclaves is not supported (E2),
 - no hardware isolation inside of enclaves to isolate an **enclave runtime** (needed to run the application inside the enclave) from the application (E3), and
-- no separate attestation of the application and the runtime (E4).
+- no separate attestation of the application and the runtime (E4).  Note that a separate attestation would help to establish trust in the runtime independent of the application. This is important if we use the runtime as a Sandbox, i.e., we ensure that for example only explicitly permitted communication channels can be used by the confidential app.
 
 CPUs provide TEEs in form of enclaves and/or CVMs. Enclaves can be seen as a **Confidential PVM**, i.e., an enclave isolates individual processes. A CVM isolates a VM from the hypervisor, i.e., the hypervisor cannot access the memory of the CVM. However, the guest OS running inside the CVM can access the data of all applications running inside of the CVM.
 
@@ -755,7 +755,7 @@ There are more interfaces that we need to consider (e.g., the above mentioned `c
   Disadvantages of this approach are:
 
   - **(New Manifests)**:  Security admins need to learn new policies instead of using existing Kubernetes manifests that are already known to admins.
-  - **(Binary Transformation)**: The operating system cannot access enclaves to protect the application from malicious accesses by the operating system. This means that we  
+  - **(Binary Transformation)**: The operating system cannot access enclaves to protect the application from malicious accesses by the operating system. This means that we cannot use standard system call instructions since they require the operating system to have access to the application. Therefore, we need to transform the binaries to not use system call instructions.
 
 - **Application Microservices inside of Enclaves with Governance (O5)**
 
@@ -765,7 +765,9 @@ There are more interfaces that we need to consider (e.g., the above mentioned `c
 
 ## Objectives for Supporting CVMs
 
-- **(T1)**: Building a confidential CVM platform instead of enclaves, we would like to be able to address all adversarial models, i.e., **(A1-10)**. This would result in a better security than option (O5) by being able to address adversarial models. This would require some extensions along the following lines:
+Based on the above discussions, we define the following objectives:
+
+- **(T1)**: Building a confidential CVM platform - instead of using enclaves -, we would like to be able to address all adversarial models, i.e., **(A1-10)**. This would result in a better security than option (O5) by being able to address adversarial models. This would require some extensions along the following lines:
 
   - **(A9.3)**: Potential to integrate with a confidential build process with governance to protect against attacks by the development team
 
@@ -821,7 +823,8 @@ pVMs enable a single application to be able to exploit a solution like AMD SEV a
 IPC or memory to either emulate multiprocessing or avail individual serviceswhile still maintaining their relative isolation. Such an architectural approach is shown in the Figure below.
 
 ![alt text](images/pvm2.png)
-**Figure**: *A container featuring an application hosting two virtual machines (pVMs). These pVMs, spanning both user and kernel spaces in a VM, collaborate with the host application and each other via shared memory, as illustrated. This link could be used to emulate functionality and non-sensitive state in the host. The disadvantage of this approach is that we have to have on CVM per process and hence, potentially multiple CVMs per container. This can introduce quite dramatic overheads in spawning applications and containers.*
+
+The figure depicts a container featuring an application hosting two virtual machines (pVMs). These pVMs, spanning both user and kernel spaces in a VM, collaborate with the host application and each other via shared memory, as illustrated. This link could be used to emulate functionality and non-sensitive state in the host. The disadvantage of this approach is that we have to have on CVM per process and hence, potentially multiple CVMs per container. This can introduce quite dramatic overheads in spawning applications and containers.
 
 ### Microkernel and libOS Solution
 
@@ -884,11 +887,9 @@ In case the infrastructure provider and the Kubernetes provider are different en
 
 ### Kubernetes Nodes are VMs
 
-In case of Intel SGX or Azure, we might need to run the Kubernetes inside of VMs. In the case of SGX, we can isolate the confidential applications and services by running them in isolated memory regions (i.e., inside of enclaves).
+Depending on the environment, Kubernetes nodes may need to run inside virtual machines (VMs). For example, with Intel SGX, confidential applications and services can be isolated within dedicated memory regions known as enclaves. On Azure, it is possible to spawn Confidential Virtual Machines (CVMs) from existing VMs. Technically, these CVMs operate as peers to the original VM, but logically, the VM acts as their “parent,” providing resources to the CVMs. This setup allows confidential applications and services to be isolated using these “virtually” nested CVMs.
 
-In case of Azure, one can spawn CVMs from VMs. Technically, these CVMs are peers of the VM. Logically, the VM is the "parent" of the CVMs. The CVMs get their resources from the "parent" VM. Hence, we might isolate the confidential applications and services using such "virtually" nested CVMs.
-
-Independently, if the Kubernetes Node runs as CVM or VM, we have the following options to protect confidential applications and services.
+Regardless of whether the Kubernetes node is running as a CVM or a VM, there are several options available to protect confidential applications and services.
 
 #### Pod as CVM
 
@@ -920,7 +921,7 @@ To ensure good performance, including fast startup times and low resource usage,
 
 To achieve strong security, where no trust is placed in runtime administrators, confidential applications should be isolated at the process level.
 
-However, performance and security alone are not enough — the solution must also offer ease of use to be practical in real-world deployments.
+However, performance and security alone are not enough — the solution must also offer ease of use to be practical in real-world deployments. This also means that we need to address some of the technical limitations of SGX like very slow process forks and missing support for shared memory.
 
 ## Secure Configuration and Ease of Use
 
